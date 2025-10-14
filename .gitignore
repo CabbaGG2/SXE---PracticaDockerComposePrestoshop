@@ -1,0 +1,15 @@
+#En este archivo se especifican los archivos y directorios que Git debe ignorar en un proyecto.
+# .env
+node_modules/
+dist/
+.DS_Store
+logs/
+*.log
+coverage/
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.old
