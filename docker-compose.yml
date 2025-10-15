@@ -39,6 +39,8 @@ services:
       ADMIN_MAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWD: ${ADMIN_PASSWORD}
       PS_DOMAIN: ${PS_DOMAIN}
+      APACHE_SERVER_NAME: ${PS_DOMAIN}
+      PS_SHOP_NAME: "La tiendita de electronicos de diego"
       PS_ENABLE_SSL: ${PS_ENABLE_SSL:-1}
       PS_FOLDER_INSTALL: ${PS_FOLDER_INSTALL:-install-dev}
       PS_FOLDER_ADMIN: ${PS_FOLDER_ADMIN:-admin-dev}
