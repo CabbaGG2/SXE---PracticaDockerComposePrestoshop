@@ -1,14 +1,64 @@
+name: prestashop_sxe
+
 services:
   db:
-    image: mysql:8.0
+    image: mariadb:10.6
+    container_name: prestashop_mariadb
     restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_RANDOM_ROOT_PASSWORD: ${MYSQL_RANDOM_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
   prestashop:
+    image: prestashop/prestashop:1.7.7.0-7.2
+    container_name: prestashop_app
+    restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      DB_SERVER: db
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWD: ${MYSQL_PASSWORD}
+      PS_INSTALL_AUTO: ${PS_INSTALL_AUTO}
+      PS_LANGUAGE: ${PS_LANGUAGE}
+      PS_COUNTRY: ${PS_COUNTRY}
+      ADMIN_MAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWD: ${ADMIN_PASSWORD}
+      PS_DOMAIN: ${PS_DOMAIN}
+      PS_ENABLE_SSL: ${PS_ENABLE_SSL:-1}
+      PS_FOLDER_INSTALL: ${PS_FOLDER_INSTALL:-install-dev}
+      PS_FOLDER_ADMIN: ${PS_FOLDER_ADMIN:-admin-dev}
+    volumes:
+      - prestashop_data:/var/www/html
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: prestashop_phpmyadmin
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+
+volumes:
+  db_data:
+  prestashop_data:
