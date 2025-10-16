@@ -12,6 +12,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - prestashop_network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 15s
@@ -20,7 +22,7 @@ services:
       start_period: 60s
 
   prestashop:
-    image: prestashop/prestashop:8.0
+    image: prestashop/prestashop:latest
     container_name: prestashop_app
     restart: always
     depends_on:
@@ -33,22 +35,23 @@ services:
       DB_NAME: ${MYSQL_DATABASE}
       DB_USER: ${MYSQL_USER}
       DB_PASSWD: ${MYSQL_PASSWORD}
-      PS_INSTALL_AUTO: ${PS_INSTALL_AUTO}
-      PS_LANGUAGE: ${PS_LANGUAGE}
-      PS_COUNTRY: ${PS_COUNTRY}
-      ADMIN_MAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWD: ${ADMIN_PASSWORD}
+      PS_INSTALL_AUTO: 1
       PS_DOMAIN: ${PS_DOMAIN}
-      APACHE_SERVER_NAME: ${PS_DOMAIN}
-      PS_SHOP_NAME: "La tiendita de electronicos de diego"
-      PS_ENABLE_SSL: ${PS_ENABLE_SSL:-1}
-      PS_FOLDER_INSTALL: ${PS_FOLDER_INSTALL:-install-dev}
-      PS_FOLDER_ADMIN: ${PS_FOLDER_ADMIN:-admin-dev}
+      PS_COUNTRY: "es"
+      PS_LANGUAGE: "es"
+      ADMIN_MAIL: ${ADMIN_MAIL}
+      ADMIN_PASSWD: ${ADMIN_PASSWD}
+      PS_FOLDER_ADMIN: admin4577
+      PS_FOLDER_INSTALL : install4577
+
+    networks:
+      - prestashop_network
+
     volumes:
       - prestashop_data:/var/www/html
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin:5
     container_name: prestashop_phpmyadmin
     restart: always
     depends_on:
@@ -58,9 +61,12 @@ services:
       - "8081:80"
     environment:
       PMA_HOST: db
-      PMA_USER: ${MYSQL_USER}
-      PMA_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - prestashop_network
 
 volumes:
   db_data:
   prestashop_data:
+
+networks:
+  prestashop_network:
