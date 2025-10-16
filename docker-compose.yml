@@ -20,7 +20,7 @@ services:
       start_period: 60s
 
   prestashop:
-    image: prestashop/prestashop:1.7.7.0-7.2
+    image: prestashop/prestashop:8.0
     container_name: prestashop_app
     restart: always
     depends_on:
@@ -48,7 +48,7 @@ services:
       - prestashop_data:/var/www/html
 
   phpmyadmin:
-    image: phpmyadmin:5
+    image: phpmyadmin/phpmyadmin:latest
     container_name: prestashop_phpmyadmin
     restart: always
     depends_on:
