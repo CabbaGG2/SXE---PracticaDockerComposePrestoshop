@@ -63,180 +63,39 @@ docker compose up -d
    | start_period        | 60s                       | Tiempo que Docker espera antes de empezar a hacer las comprobaciones, para dar tiempo al servicio a arrancar.|
   
 </details>
-
-
-Para saber si la imagen se instaló correctamente en nuestro equipo se utiliza el siguiente comando:
-    
-```bash
-docker images
-```
-
-Aquí una captura de pantalla:
- - Como se puede ver en el apartado "TAG" tiene la versión 2.4.
-
- ![Instalación de Apache](Imagenes/2.png)
-
 <br><br>
 
-## Creación de contenedor Apache con el nombre "dam_web1"
-Para crear el contenedor de Alpine sin nombre utilizamos el comando:
-Para poder crear el contenedor con nombre "dam_web1"utilizaremos el siguiente comando:
+<details><summary><h3>Contenedor del servicio Prestashop</h3></summary>
+  
+  Para configurar el servicio de Prestashop hacemos uso de los siguientes atributos: 
+  ![Prestashop](Imagenes/2.png)
+  <br><br>
 
-```bash
-docker run -d --name dam_web1 -p 8000:80 httpd:2.4
-```
-Explicación de los parametros:
-- (-d)&nbsp;&nbsp;&nbsp;&nbsp;Ejecuta el contenedor en segundo plano, viene de la palabra "detached".
-- (--name dam_web1)&nbsp;&nbsp;&nbsp;&nbsp;Asigna el nombre al contenedor.
-- (-p 8000:80)&nbsp;&nbsp;&nbsp;&nbsp;Este comando mapea el puerto 8000 de tu máquina local al puerto 80 del contenedor.
-
-<br><br>
-Captura de pantalla de como se ve el comando en la terminal:
-
- ![Creación de contenedor](Imagenes/3.png)
- <br><br>
-El contenedor arranca automaticamente.
-
-
- ## Comprobación del Servicio
-
-Para comprobar que el servicio está en linea entraremos en nuestro localhost de la maquina local:
-
-```bash
-http://localhost:8000
-```
-<br><br>
-Captura de pantalla del navegador con el servicio Apache en línea:
-![Comprobación de servicio](Imagenes/4.png)
-
-Como se puede ver, se visualiza la página por defecto de Apache.
-<br><br>
-
-## Crear "bind mount"
-
-Primero tendremos que crear un directorio en nuestro equipo local en donde queramos alojar nuestro servicio web(en este caso se utilizo la dirección del proyecto Docker):
-
-```bash
-mkdir -p apache_servidorWeb
-```
-
-- Captura de pantalla:
-
-![Prueba de ping](Imagenes/5.png)
-<br><br>
-El siguiente paso es averiguar donde está alojado el directorio de 'htdocs' del apache2 en el contenedor, este se consigue en la siguiente ruta:
-
-```bash
-/usr/local/apache2/htdocs
-```
-
-<br><br>
-El siguiente paso es recrear el contenedor "dam_web1" pero con bind mount.
-
-<br><br>
-Primero detendremos el contenedor y posteriormente lo eliminamos con los siguientes comandos:
-
-```bash
-docker stop dam_web1
-docker rm dam_web1
-```
-<br><br>
-Captura de pantalla:
-
-![Prueba de ping](Imagenes/6.png)
-<br><br>
-
-Ahora para crear el contenedor nuevamente con el bind mount utilizamos el siguiente comando:
-
-```bash
-docker run -d --name dam_web1 -p 8000:80 \ -v /home/dam/SXE/PracticaDockerApache/apache_servidorWeb:/usr/local/apache2/htdocs \
-```
-<br><br>
-
-En la siguiente captura de pantalla podemos ver que se crea denuevo el contenedor con el bind mount:
-
-![Prueba de ping](Imagenes/7.png)
-<br><br>
-
-## Creación de "Hola Mundo" en HTML
-
-Para crear el archivo "index.html" con el Hola Mundo en el directorio montado utilizamos el siguiente comando:
-
-```bash
-echo "<h1>Hola Mundo desde Apache con Docker</h1>" > ~/apache_servidorWeb/index.html
-```
-
-<br><br>
-
-Captura de pantalla:
-
-![Creacion de Hola Mundo](Imagenes/9.png)
-<br><br>
-
-Ahora para comprobar que se ve el "Hola Mundo" abrimos en el navegador la dirección del localhost:
-
-```bash
-http://localhost:8000
-```
-<br><br>
-
-Captura de pantalla:
-
-![Creacion de Hola Mundo](Imagenes/10.png)
-<br><br>
-
-## Creación de segundo contenedor "dam_web2"
-
-Usaremos el mismo comando utilizado anteriormente para realizar el bind mount pero en puerto distinto, este caso "9080":
-<br><br>
-
-```bash
-docker run -d --name dam_web1 -p 9080:80 \ -v /home/dam/SXE/PracticaDockerApache/apache_servidorWeb:/usr/local/apache2/htdocs \
-```
-
-Captura de pantalla:
-![Creación de contenedor Bind Mount](Imagenes/11.png)
-<br><br>
-
-Ahora se tienen en ejecución dos contenedores que comparten el mismo volumen por lo que si consultamos los siguientes puertos:
-
-- http://localhost:8000
-- http://localhost:9080
-<br><br>
-
-Veremos la misma página en ambas direcciones.
-
-Captura de pantalla:
-![Paginas Web](Imagenes/12.png)
-<br><br>
-
-## Modificaciones en el archivo HTML compartido
-
-Realizaremos unos pequeños cambios en el archivo HTML creado anteriormente, ya sea realizando un "echo" por terminal o directamente en el archivo por block de notas:
-
-Captura de pantalla:
-<br><br>
-![Modificaciones pagina web](Imagenes/13.png)
-<br><br>
-
-Seguido a esto vamos a detener e iniciar ambos contenedores para refrescar los cambios realizados con los comandos:
-
-```bash
-docker stop dam_web1 dam_web2
-docker start dam_web1 dam_web2
-```
-
-Captura de pantalla:
-<br><br>
-![Modificaciones pagina web](Imagenes/14.png)
-<br><br>
-
-Al refrescar ambos en enlaces en el navegador deberían mostrar la nueva versión de la pagina web:
-
-Captura de pantalla:
-<br><br>
-![Modificaciones pagina web](Imagenes/15.png)
-<br><br>
+  | Atributo        | Valor                | Descripción                                                                                          |
+   | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+   | image               | prestashop/prestashop:latest | Especifica la imagen en la que se basa el contenedor, en este caso es la ultima versión de Prestashop. |
+   | container_name      | prestashop_app            | Especifica un nombre personalizado para el contenedor, en este caso es "prestashop_app", si no se especifica Docker genera uno automáticamanete.   |
+   | restart             | always                    | Indica cuando debe reiniciarse el contenedor, sus valores pueden ser: no (no se reinicia), always (se reincia siempre que el contenedor se detenga), on-failure (se reinicia solo si falla), unless-stopped (se reinicia siempre a menos que se detenga manualmente). |
+   | depends_on          | db                        | El atributo depends_on asegura que un contenedor se inicie antes que otro, pero no garantiza que el servicio dentro del contenedor esté realmente listo y funcionando, en este caso el servicio depende de "db" y para solucionar este problema db tiene el atributo healtcheck. |
+   | condition           | service_healthy           | Con condition: service_healthy, le indicamos a Docker Compose que no inicie el contenedor de wordpress hasta que el healthcheck del contenedor db sea exitoso. |
+   | ports               | "8080:80"                 | Ports mapea puertos entre el host y el contenedor. En este caso mapea el puerto 8080 del contenedor con el 80 del host. |
+   | environment         |                           | Es el atributo en la que se ván a especificar las distintas variables de entorno para el correcto funcionamiento del contenedor. |
+   | DB_SERVER           | db                        | Aquí se establece la variable de entorno de donde se cogerá la base de datos, en este ejemplo se usa el contenedor "db". |
+   | DB_NAME             | ${MYSQL_DATABASE}         | Aquí se especifica el nombre de la base de datos, en este caso está codificado para que coja el valor de un archivo .env|
+   | DB_USER             | ${MYSQL_USER}             | Aquí se especifíca el usuario de la base de datos, en el ejemplo está codificado para buscar el valor en el archivo .env|
+   | DB_PASSWD           | ${MYSQL_PASSWORD}         | Aquí se especifíca la contraseña de la base de datos, en el ejemplo está codificado para buscar el valor en el archivo .env |
+   | PS_INSTALL_AUTO     | 1                         | Este entorno de variable le indica al servicio que realice una instalación automática.                 |
+   | PS_DOMAIN           | ${PS_DOMAIN}              | Este entorno de variable indica cual es la dirección dominio por la cuál va a ser accesible el servicio. |
+   | PS_COUNTRY          | "es"                      | Esta variable cambia el país por defecto en el que se instala PrestaShop, en el ejemplo cambiamos el país a España. |
+   | PS_LANGUAGE         | "es"                      | Esta variable cambia el lenguaje por defecto en el que se instala PrestaShop, en el ejemplo cambiamos a español.    |
+   | ADMIN_MAIL          | ${ADMIN_MAIL}             | Esta variable sobreescribe el email por defecto del usuario admin, en este ejemplo está codificado en el archivo .env |
+   | ADMIN_PASSWD        | ${ADMIN_PASSWD}           | Esta variable sobreescribe la clave por defecto del usuario admin, en este ejemplo está codificado en el archivo .env |
+   | PS_FOLDER_ADMIN     | admin4577                 | Esta variable cambia el nombre de la carpeta de administrador, en nuestro caso la renombramos "admin4577".            |
+   | PS_FOLDER_INSTALL   | install4577               | Esta variable cambia el nombre de la carpeta de instalación en donde se instala todo el programa de PrestaShop que se encuentra en el contenedor, en nuestro caso se renombró "install4577" |
+   | volumes             | prestashop_data:/var/www/html | Permite definir una lista de volúmenes, que pueden ser bind mount o un volumen docker. Para reutilizar un volumen en múltiples servicios, se debe definir fuera del bloque services. |
+   | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
+  
+</details>
 
 ## Contacto
 José Gregorio Cámara Depablos - [@CabbaGG](https://x.com/Geek_Cabagge) - JOS.95camara@gmail.com
