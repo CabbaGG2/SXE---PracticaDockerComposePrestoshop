@@ -17,6 +17,7 @@ docker compose up -d
 <details><summary><h3>Contenedor de la base de datos Mariadb</h3></summary>
   
   Para configurar la base de datos Mariadb hacemos uso de los siguientes atributos: 
+  <br><br>
   ![Mariadb](Imagenes/1.png)
   <br><br>
 
@@ -46,6 +47,7 @@ docker compose up -d
 <details><summary><h3>Contenedor del servicio Prestashop</h3></summary>
   
   Para configurar el servicio de Prestashop hacemos uso de los siguientes atributos: 
+  <br><br>
   ![Prestashop](Imagenes/2.png)
   <br><br>
 
@@ -78,6 +80,7 @@ docker compose up -d
 <details><summary><h3>Contenedor del servicio phpMyAdmin</h3></summary>
   
   Para configurar el servicio de PhpMyAdmin hacemos uso de los siguientes atributos: 
+  <br><br>
   ![phpmyadmin](Imagenes/3.png)
   <br><br>
 
@@ -101,6 +104,7 @@ docker compose up -d
 <details><summary><h3>Creación del fichero .env</h3></summary>
   
   Para crear el archivo .env solo se tiene que crear el fichero sin nombre antes del punto: 
+  <br><br>
   ![envFile](Imagenes/4.png)
   <br><br>
   En este fichero se declaran todas las variables que utilizará el compose.yml para asignarlas a sus variables de entorno.
@@ -123,10 +127,10 @@ docker compose up -d
 <details><summary><h3>Capturas de puesta en marcha</h3></summary>
   
   Aquí se puede ver que phpmyadmin cargó las tablas de la base de datos correctamente y PrestaShop realizó la instalación automática sin ningún inconveniente: 
+  <br><br>
   ![servicios](Imagenes/5.png)
   <br><br>
   ![servicios](Imagenes/6.png)
-  <br><br>
 
 </details>
 
