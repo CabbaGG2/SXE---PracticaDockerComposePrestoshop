@@ -78,7 +78,7 @@ docker compose up -d
 <details><summary><h3>Contenedor del servicio phpMyAdmin</h3></summary>
   
   Para configurar el servicio de PhpMyAdmin hacemos uso de los siguientes atributos: 
-  ![Prestashop](Imagenes/3.png)
+  ![phpmyadmin](Imagenes/3.png)
   <br><br>
 
   | Atributo        | Valor                | Descripción                                                                                          |
@@ -96,6 +96,28 @@ docker compose up -d
    | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
 
 - Para reutilizar las redes y los volumenes en multiples servicios hay que declarar las variables fuera del bloque "services" como se puede ver en la imagen.
+</details>
+
+<details><summary><h3>Creación del fichero .env</h3></summary>
+  
+  Para crear el archivo .env solo se tiene que crear el fichero sin nombre antes del punto: 
+  ![envFile](Imagenes/4.png)
+  <br><br>
+  En este fichero se declaran todas las variables que utilizará el compose.yml para asignarlas a sus variables de entorno.
+
+  | Variable        | Valor                | Descripción                                                                                          |
+   | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+   | MYSQL_DATABASE      | ps_sxe2526                | Nombre de la base de datos MySQL.                                                                     |
+   | MYSQL_USER          | gregorioSXE               | Nombre del usuario administrador de la base de datos MySQL.                                           |
+   | MYSQL_PASSWORD      | ClaveSuperFuerte1234SXE   | Contraseña de la base de datos MySQL.                                                                  |
+   | MYSQL_ROOT_PASSWORD | claveSuperSegura1234      | Contraseña del usuario root de la base de datos MySQL.                                                 |
+   | PS_INSTALL_AUTO     | 0                         | Variable que se le pasa a Prestashop para realizar la instalación automática, en caso de "0" Prestashop no realiza la instalación automática. |
+   | PS_LANGUAGE         | es                        | Variable del lenguaje en el que se instalará el Prestashop.                                            |
+   | PS_COUNTRY          | es                        | Variable del pais en el que se instalará el Prestashop.                                            |
+   | ADMIN_EMAIL         | greg@prestashop.com       | Esta variable define el correo del administrador de Prestashop.                                        |
+   | ADMIN_PASSWORD      | Admin1234                 | Esta variable define la contraseña del administrador de Prestashop.                                    |
+   | PS_DOMAIN           | localhost:8080            | Esta variable indica cual es la dirección dominio por la cuál va a ser accesible el servicio.          |
+
 </details>
 
 ## Contacto
