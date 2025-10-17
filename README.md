@@ -120,6 +120,16 @@ docker compose up -d
 
 </details>
 
+<details><summary><h3>Capturas de puesta en marcha</h3></summary>
+  
+  Aquí se puede ver que phpmyadmin cargó las tablas de la base de datos correctamente y PrestaShop realizó la instalación automática sin ningún inconveniente: 
+  ![servicios](Imagenes/5.png)
+  <br><br>
+  ![servicios](Imagenes/6.png)
+  <br><br>
+
+</details>
+
 ## Contacto
 José Gregorio Cámara Depablos - [@CabbaGG](https://x.com/Geek_Cabagge) - JOS.95camara@gmail.com
 
