@@ -2,27 +2,6 @@
 
 En este README utilizaremos la herramienta Docker Compose para crear un multicontenedores para poner en marcha un servicio de Prestashop con un solo archivo YML.
 
-<details><summary><h3>ÍNDICE</h3></summary>
-
-* [Descripción General](#Instalación-de-Servicio-Web-con-Docker-Apache)
-
-* [Descarga de la Imagen "httpd" y comprobación de la misma](#Descarga-de-la-Imagen-httpd-y-comprobación-de-la-misma)
-
-* [Creación de contenedor Apache con el nombre "dam_web1"](#Creación-de-contenedor-Apache-con-el-nombre-dam_web1)
-
-* [Comprobación del Servicio](#Comprobación-del-Servicio)
-
-* [Crear "bind mount"](#Crear-bind_mount)
-
-* [Creación de segundo contenedor "dam_web2"](#Creación-de-segundo-contenedor-dam_web2)
-
-* [Modificaciones en el archivo HTML compartido](#Modificaciones-en-el-archivo-HTML-compartido)
-
-* [Contacto](#Contacto)
-
-* [Documentación](#Documentación)
-
-</details>
 
 ## Preparación de archivo YML: 
 
@@ -63,7 +42,6 @@ docker compose up -d
    | start_period        | 60s                       | Tiempo que Docker espera antes de empezar a hacer las comprobaciones, para dar tiempo al servicio a arrancar.|
   
 </details>
-<br><br>
 
 <details><summary><h3>Contenedor del servicio Prestashop</h3></summary>
   
@@ -95,6 +73,29 @@ docker compose up -d
    | volumes             | prestashop_data:/var/www/html | Permite definir una lista de volúmenes, que pueden ser bind mount o un volumen docker. Para reutilizar un volumen en múltiples servicios, se debe definir fuera del bloque services. |
    | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
   
+</details>
+
+<details><summary><h3>Contenedor del servicio phpMyAdmin</h3></summary>
+  
+  Para configurar el servicio de PhpMyAdmin hacemos uso de los siguientes atributos: 
+  ![Prestashop](Imagenes/3.png)
+  <br><br>
+
+  | Atributo        | Valor                | Descripción                                                                                          |
+   | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+   | image               | phpmyadmin:5              | Especifica la imagen en la que se basa el contenedor, en este caso utilizamos la versión 5 de phpmyadmin. |
+   | container_name      | prestashop_phpmyadmin     | Especifica un nombre personalizado para el contenedor, en este caso es "prestashop_phpmyadmin", si no se especifica Docker genera uno automáticamanete.   |
+   | restart             | always                    | Indica cuando debe reiniciarse el contenedor, sus valores pueden ser: no (no se reinicia), always (se reincia siempre que el contenedor se detenga), on-failure (se reinicia solo si falla), unless-stopped (se reinicia siempre a menos que se detenga manualmente). |
+   | depends_on          | db                        | El atributo depends_on asegura que un contenedor se inicie antes que otro, pero no garantiza que el servicio dentro del contenedor esté realmente listo y funcionando, en este caso el servicio depende de "db" y para solucionar este problema db tiene el atributo healtcheck. |
+   | condition           | service_healthy           | Con condition: service_healthy, le indicamos a Docker Compose que no inicie el contenedor de wordpress hasta que el healthcheck del contenedor db sea exitoso. |
+   | ports               | "8081:80"                 | Ports mapea puertos entre el host y el contenedor. En este caso mapea el puerto 8081 del contenedor con el 80 del host. |
+   | environment         |                           | Es el atributo en la que se ván a especificar las distintas variables de entorno para el correcto funcionamiento del contenedor. |
+   | PMA_HOST            | db                        | Esta variable define la dirección/host name del servidor de la base de datos de MySQL, en este ejemplo se usa el contenedor "db". |
+   | PMA_USER            | ${MYSQL_USER}             | Aquí se especifíca el usuario de la base de datos para que se abra automáticamente el servicio sin solicitar el usuario, en el ejemplo está codificado para buscar el valor en el archivo .env|
+   | PMA_PASSWORD        | ${MYSQL_PASSWORD}         | Aquí se especifíca la contraseña de la base de datos para que se abra automáticamente el servicio sin solicitar la contraseña, en el ejemplo está codificado para buscar el valor en el archivo .env |
+   | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
+
+- Para reutilizar las redes y los volumenes en multiples servicios hay que declarar las variables fuera del bloque "services" como se puede ver en la imagen.
 </details>
 
 ## Contacto
