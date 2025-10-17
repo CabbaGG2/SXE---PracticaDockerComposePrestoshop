@@ -137,7 +137,7 @@ docker compose up -d
 ## Contacto
 José Gregorio Cámara Depablos - [@CabbaGG](https://x.com/Geek_Cabagge) - JOS.95camara@gmail.com
 
-Project Link: ([Instalación de Servicio Web con Docker-Apache](https://github.com/CabbaGG2/SXE---PracticaDockerComposePrestoshop))
+Project Link: ([Instalación de servicio Prestashop con Docker Compose](https://github.com/CabbaGG2/SXE---PracticaDockerComposePrestoshop))
 
 ## Documentación
 
